@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hum">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#121214">
+<meta name="format-detection" content="telephone=no">
+<title>Hum</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="stylesheet" href="style.css?v=1">
+<script src="app.js?v=1" defer></script>
+</head>
+<body>
+
+<div id="setup" hidden>
+  <div class="setup-in">
+    <img class="logo" src="icon-180.png" alt="">
+    <h1>Connect Google Drive</h1>
+    <p class="lead">Hum plays music straight from your Google Drive while you listen. Nothing is saved on this iPhone.</p>
+    <form id="setupForm" novalidate>
+      <label>Client ID
+        <input id="cid" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="….apps.googleusercontent.com">
+      </label>
+      <label>Client secret
+        <input id="csec" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+      </label>
+      <label class="filebtn">Fill in from the JSON file Google gave you…
+        <input id="cjson" type="file" accept=".json,application/json,text/plain">
+      </label>
+      <label>Music folder link <span class="opt">(optional)</span>
+        <input id="cfolder" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Empty = all music in your Drive">
+      </label>
+      <div class="redirect">
+        <div class="redirect-label">Authorized redirect URI for Google Cloud</div>
+        <div class="redirect-row"><code id="ruri"></code><button type="button" id="copyUri">Copy</button></div>
+      </div>
+      <p id="setupMsg" class="msg" role="status"></p>
+      <button class="primary" type="submit" id="signin">Sign in with Google</button>
+      <button class="ghost" type="button" id="setupCancel" hidden>Cancel</button>
+    </form>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header id="top">
+    <div class="bar">
+      <button id="back" class="icon" aria-label="Back" hidden></button>
+      <h1 id="title">Library</h1>
+      <button id="menu" class="icon" aria-label="More"></button>
+    </div>
+    <div id="banner" hidden><span>You're signed out of Google Drive.</span><button id="resign">Sign in</button></div>
+    <label class="search" id="searchBox"><span class="sicon"></span><input id="q" type="search" placeholder="Search songs, artists, albums" autocomplete="off" autocorrect="off" spellcheck="false"></label>
+    <div id="sub"></div>
+  </header>
+  <main id="scroll"><div id="list"></div></main>
+  <footer id="foot">
+    <div id="mini" hidden>
+      <div id="mArt" class="art"></div>
+      <div class="mmeta"><div id="mTitle" class="t"></div><div id="mSub" class="s"></div></div>
+      <button id="mLike" class="icon like" aria-label="Like"></button>
+      <button id="mPlay" class="icon" aria-label="Play"></button>
+      <div class="mprog"><div id="mBar"></div></div>
+    </div>
+    <nav id="tabs">
+      <button data-view="library"><span class="ti" data-icon="library"></span>Library</button>
+      <button data-view="liked"><span class="ti" data-icon="heartFill"></span>Liked</button>
+      <button data-view="playlists"><span class="ti" data-icon="playlists"></span>Playlists</button>
+    </nav>
+  </footer>
+</div>
+
+<div id="full" aria-hidden="true">
+  <div class="full-in">
+    <div class="full-top">
+      <button id="fClose" class="icon" aria-label="Close"></button>
+      <div class="ctx"><small>Playing from</small><b id="fCtx">Library</b></div>
+      <button id="fMore" class="icon" aria-label="More"></button>
+    </div>
+    <div class="fart-wrap"><div id="fArt" class="art big"></div></div>
+    <div class="finfo">
+      <div class="fmeta"><div id="fTitle" class="ft"></div><div id="fArtist" class="fs"></div></div>
+      <button id="fLike" class="icon like" aria-label="Like"></button>
+    </div>
+    <input id="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Position">
+    <div class="times"><span id="tCur">0:00</span><span id="tDur"></span></div>
+    <div class="controls">
+      <button id="fShuf" class="icon" aria-label="Shuffle"></button>
+      <button id="fPrev" class="icon big" aria-label="Previous"></button>
+      <button id="fPlay" class="playbtn" aria-label="Play"></button>
+      <button id="fNext" class="icon big" aria-label="Next"></button>
+      <button id="fRep" class="icon" aria-label="Repeat"></button>
+    </div>
+  </div>
+</div>
+
+<div id="sheet" hidden>
+  <div class="backdrop"></div>
+  <div class="panel"><div class="sheet-title"></div><div class="items"></div><button class="cancel">Cancel</button></div>
+</div>
+
+<div id="modal" hidden>
+  <div class="backdrop"></div>
+  <form class="box" novalidate>
+    <div class="mtitle"></div>
+    <div class="mtext"></div>
+    <input class="minput" autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="mbtns"><button type="button" class="mcancel">Cancel</button><button type="submit" class="mok">OK</button></div>
+  </form>
+</div>
+
+<div id="toast" role="status"></div>
+<audio id="audio" preload="auto"></audio>
+</body>
+</html>
